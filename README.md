@@ -1,6 +1,6 @@
 # claude-code-mods
 
-<img width="1115" height="836" alt="Screenshot 2026-10-19 at 8 19 30 PM" src="https://github.com/user-attachments/assets/859fff78-83ea-443b-b238-081cba389023" />
+<img width="1096" height="808" alt="Screenshot 2026-10-19 at 8 25 29 PM" src="https://github.com/user-attachments/assets/b22cc708-5a70-4333-b3ba-79517a3b7603" />
 
 Mods for Claude Code that add a band above the prompt, a side pane or a slash command. Each is its own plugin, so you can install only the ones you want.
 
