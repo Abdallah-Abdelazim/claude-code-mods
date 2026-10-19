@@ -162,33 +162,35 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#e0af68"> ◔ USAGE   </Text>
-          {limits.map((l, i) => {
-            const cells = bar(l.percent, 6)
-            return (
-              <Text color={toneOf(l.percent)}>
-                {i ? '  │ ' : ' '}
-                {shortName(l.kind)} {cells.on}<Text color={TRACK}>{cells.off}</Text>{'  '}{Math.round(l.percent)}%
-                {l.resetsAt ? ` ↻${resetText(l.kind, l.resetsAt, now)}` : ''}
+          <Box flexShrink={0}><Text bold color="#0b0b0f" backgroundColor="#e0af68"> ◔ USAGE   </Text></Box>
+          <Text wrap="truncate-end">
+            {limits.map((l, i) => {
+              const cells = bar(l.percent, 6)
+              return (
+                <Text color={toneOf(l.percent)}>
+                  {i ? '  │ ' : ' '}
+                  {shortName(l.kind)} {cells.on}<Text color={TRACK}>{cells.off}</Text>{'  '}{Math.round(l.percent)}%
+                  {l.resetsAt ? ` ↻${resetText(l.kind, l.resetsAt, now)}` : ''}
+                </Text>
+              )
+            })}
+            {out !== null && <Text color="#f59e0b">{'  ⚠ at this pace: out in '}{countdown(out)}</Text>}
+            {limits.length === 0 && context !== null && (
+              <Text color={toneOf(context)}>
+                {' context '}{bar(context, 6).on}<Text color={TRACK}>{bar(context, 6).off}</Text>{'  '}{Math.round(context)}%
               </Text>
-            )
-          })}
-          {out !== null && <Text color="#f59e0b">{'  ⚠ at this pace: out in '}{countdown(out)}</Text>}
-          {limits.length === 0 && context !== null && (
-            <Text color={toneOf(context)}>
-              {' context '}{bar(context, 6).on}<Text color={TRACK}>{bar(context, 6).off}</Text>{'  '}{Math.round(context)}%
-            </Text>
-          )}
-          {cost !== null && (
-            <Text dimColor>
-              {'  │ session $'}
-              {cost.toFixed(2)}
-              {delta !== null ? ` (+$${delta.toFixed(2)})` : ''}
-            </Text>
-          )}
-          {limits.length === 0 && context === null && cost === null && (
-            <Text dimColor>{' no usage data yet'}</Text>
-          )}
+            )}
+            {cost !== null && (
+              <Text dimColor>
+                {'  │ session $'}
+                {cost.toFixed(2)}
+                {delta !== null ? ` (+$${delta.toFixed(2)})` : ''}
+              </Text>
+            )}
+            {limits.length === 0 && context === null && cost === null && (
+              <Text dimColor>{' no usage data yet'}</Text>
+            )}
+          </Text>
         </Box>
         {below}
       </Box>

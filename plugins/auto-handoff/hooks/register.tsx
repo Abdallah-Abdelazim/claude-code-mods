@@ -232,33 +232,35 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#7aa2f7"> ⇄ CONTEXT </Text>
-          <Text color={fill === null ? '#a1a1aa' : toneOf(fill, s.threshold)}>
-            {' ctx '}
-            {cells ? cells.on : '—'}
-            {cells && <Text color={TRACK}>{cells.off}</Text>}
-            {'  '}
-            {fill === null ? '' : `${Math.round(fill)}%`}
+          <Box flexShrink={0}><Text bold color="#0b0b0f" backgroundColor="#7aa2f7"> ⇄ CONTEXT </Text></Box>
+          <Text wrap="truncate-end">
+            <Text color={fill === null ? '#a1a1aa' : toneOf(fill, s.threshold)}>
+              {' ctx '}
+              {cells ? cells.on : '—'}
+              {cells && <Text color={TRACK}>{cells.off}</Text>}
+              {'  '}
+              {fill === null ? '' : `${Math.round(fill)}%`}
+            </Text>
+            <Text color={isDue ? '#ef4444' : undefined} dimColor={!isDue}>
+              {'  · saves at '}
+              {s.threshold}%
+            </Text>
+            {phase === 'saving' && <Text dimColor>{'  · saving…'}</Text>}
+            {phase === 'saved' && savedAt !== null && (
+              <Text color="#22c55e">{'  ✓ saved '}{clockTime(savedAt)}</Text>
+            )}
+            {showStale && (
+              <Text dimColor>{'  from '}{agoShort(now - stale.mtimeMs)}{' ago: '}{stale.objective}</Text>
+            )}
           </Text>
-          <Text color={isDue ? '#ef4444' : undefined} dimColor={!isDue}>
-            {'  · saves at '}
-            {s.threshold}%
-          </Text>
-          {phase === 'saving' && <Text dimColor>{'  · saving…'}</Text>}
-          {phase === 'saved' && savedAt !== null && (
-            <Text color="#22c55e">{'  ✓ saved '}{clockTime(savedAt)}</Text>
-          )}
           {phase === 'saved' && (
-            <Box marginLeft={1}><Button key="clear" plain label="[clear & continue]" onPress={() => $.clock.after(0, () => runClear($))} /></Box>
+            <Box marginLeft={1} flexShrink={0}><Button key="clear" plain label="[clear & continue]" onPress={() => $.clock.after(0, () => runClear($))} /></Box>
           )}
           {showStale && (
-            <Text dimColor>{'  from '}{agoShort(now - stale.mtimeMs)}{' ago: '}{stale.objective}</Text>
-          )}
-          {showStale && (
-            <Box marginLeft={1}><Button key="resume" plain label="[resume]" onPress={() => $.clock.after(0, () => runResume($))} /></Box>
+            <Box marginLeft={1} flexShrink={0}><Button key="resume" plain label="[resume]" onPress={() => $.clock.after(0, () => runResume($))} /></Box>
           )}
           {phase !== 'saving' && phase !== 'saved' && !showStale && (
-            <Box marginLeft={1}><Button key="save" plain label="[save now]" onPress={() => $.clock.after(0, () => runSave($))} /></Box>
+            <Box marginLeft={1} flexShrink={0}><Button key="save" plain label="[save now]" onPress={() => $.clock.after(0, () => runSave($))} /></Box>
           )}
         </Box>
         {below}

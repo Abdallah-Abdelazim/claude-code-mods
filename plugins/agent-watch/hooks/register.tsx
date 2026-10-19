@@ -187,10 +187,12 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#bb9af7"> ◎ AGENTS  </Text>
-          {segs.map(s => (
-            <Text color={s.color} dimColor={s.dim}>{s.text}</Text>
-          ))}
+          <Box flexShrink={0}><Text bold color="#0b0b0f" backgroundColor="#bb9af7"> ◎ AGENTS  </Text></Box>
+          <Text wrap="truncate-end">
+            {segs.map(s => (
+              <Text color={s.color} dimColor={s.dim}>{s.text}</Text>
+            ))}
+          </Text>
         </Box>
         {below}
       </Box>

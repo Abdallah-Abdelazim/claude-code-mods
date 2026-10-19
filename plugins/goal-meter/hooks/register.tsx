@@ -190,8 +190,8 @@ export const register: Register = on => {
       return (
         <Box flexDirection="column">
           <Box>
-            <Text bold color="#0b0b0f" backgroundColor="#9ece6a"> ◆ GOAL    </Text>
-            <Text dimColor>{' idle, no task list yet'}</Text>
+            <Box flexShrink={0}><Text bold color="#0b0b0f" backgroundColor="#9ece6a"> ◆ GOAL    </Text></Box>
+            <Text wrap="truncate-end" dimColor>{' idle, no task list yet'}</Text>
           </Box>
           {below}
         </Box>
@@ -204,16 +204,18 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#9ece6a"> ◆ GOAL    </Text>
-          <Text>{` ${isHidden ? 'goal' : goal.name}`}</Text>
-          <Text color={isDone ? GREEN : tone}>{'  '}{cells.on}<Text color={TRACK}>{cells.off}</Text></Text>
-          {isDone ? (
-            <Text color={GREEN}>{'  done ✓ in '}{fmtMin((goal.doneAt ?? now) - goal.startedAt)}</Text>
-          ) : (
-            <Text>{`  ${s.done}/${s.total} · ${s.pct}% · ${fmtMin(now - goal.startedAt)}`}</Text>
-          )}
-          {!isDone && s.eta !== null && <Text dimColor>{'  ETA ~'}{fmtMin(s.eta)}</Text>}
-          {!isDone && s.running && !isHidden && <Text dimColor>{'  │ ▶ '}{s.running.activeForm || s.running.content}</Text>}
+          <Box flexShrink={0}><Text bold color="#0b0b0f" backgroundColor="#9ece6a"> ◆ GOAL    </Text></Box>
+          <Text wrap="truncate-end">
+            <Text>{` ${isHidden ? 'goal' : goal.name}`}</Text>
+            <Text color={isDone ? GREEN : tone}>{'  '}{cells.on}<Text color={TRACK}>{cells.off}</Text></Text>
+            {isDone ? (
+              <Text color={GREEN}>{'  done ✓ in '}{fmtMin((goal.doneAt ?? now) - goal.startedAt)}</Text>
+            ) : (
+              <Text>{`  ${s.done}/${s.total} · ${s.pct}% · ${fmtMin(now - goal.startedAt)}`}</Text>
+            )}
+            {!isDone && s.eta !== null && <Text dimColor>{'  ETA ~'}{fmtMin(s.eta)}</Text>}
+            {!isDone && s.running && !isHidden && <Text dimColor>{'  │ ▶ '}{s.running.activeForm || s.running.content}</Text>}
+          </Text>
         </Box>
         {below}
       </Box>
