@@ -162,12 +162,12 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#60a5fa"> ◔ USAGE </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#60a5fa"> ◔ USAGE   </Text>
           {limits.map((l, i) => {
             const cells = bar(l.percent, 6)
             return (
               <Text color={toneOf(l.percent)}>
-                {i ? '  │ ' : '  '}
+                {i ? '  │ ' : ' '}
                 {shortName(l.kind)} {cells.on}<Text color={TRACK}>{cells.off}</Text>{'  '}{Math.round(l.percent)}%
                 {l.resetsAt ? ` ↻${resetText(l.kind, l.resetsAt, now)}` : ''}
               </Text>
@@ -176,7 +176,7 @@ export const register: Register = on => {
           {out !== null && <Text color="#f59e0b">{'  ⚠ at this pace: out in '}{countdown(out)}</Text>}
           {limits.length === 0 && context !== null && (
             <Text color={toneOf(context)}>
-              {'  context '}{bar(context, 6).on}<Text color={TRACK}>{bar(context, 6).off}</Text>{'  '}{Math.round(context)}%
+              {' context '}{bar(context, 6).on}<Text color={TRACK}>{bar(context, 6).off}</Text>{'  '}{Math.round(context)}%
             </Text>
           )}
           {cost !== null && (
@@ -187,7 +187,7 @@ export const register: Register = on => {
             </Text>
           )}
           {limits.length === 0 && context === null && cost === null && (
-            <Text dimColor>{'  no usage data yet'}</Text>
+            <Text dimColor>{' no usage data yet'}</Text>
           )}
         </Box>
         {below}

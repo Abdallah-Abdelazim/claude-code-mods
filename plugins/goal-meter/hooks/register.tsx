@@ -190,7 +190,7 @@ export const register: Register = on => {
       return (
         <Box flexDirection="column">
           <Box>
-            <Text bold color="#0b0b0f" backgroundColor="#facc15"> ◆ GOAL </Text>
+            <Text bold color="#0b0b0f" backgroundColor="#facc15"> ◆ GOAL    </Text>
             <Text dimColor>{' idle, no task list yet'}</Text>
           </Box>
           {below}
@@ -204,7 +204,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#facc15"> ◆ GOAL </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#facc15"> ◆ GOAL    </Text>
           <Text>{` ${isHidden ? 'goal' : goal.name}`}</Text>
           <Text color={isDone ? GREEN : tone}>{'  '}{cells.on}<Text color={TRACK}>{cells.off}</Text></Text>
           {isDone ? (

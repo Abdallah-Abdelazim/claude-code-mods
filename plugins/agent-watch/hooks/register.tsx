@@ -187,7 +187,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#f472b6"> ◎ AGENTS </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#f472b6"> ◎ AGENTS  </Text>
           {segs.map(s => (
             <Text color={s.color} dimColor={s.dim}>{s.text}</Text>
           ))}

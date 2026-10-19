@@ -11,7 +11,7 @@ const MODEL_COLOR: Record<string, string> = {
 const MARK = { running: '⟳', done: '✓', failed: '✗' } as const
 const MARK_COLOR = { running: '#f59e0b', done: '#22c55e', failed: '#ef4444' } as const
 export const SKILL_COLOR = '#a3e635'
-export const CHIP_WIDTH = 10 // " ◎ AGENTS "
+export const CHIP_WIDTH = 11 // " ◎ AGENTS  ", every band chip is 11 cells
 
 // claude-opus-5-5 -> opus·5.5; a dated id keeps only the version.
 export function modelTag(id: string | null) {

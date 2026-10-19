@@ -22,6 +22,8 @@ plugins/<name>/
 
 Each `AbovePrompt` hook draws its row and wraps the band below it (`const below = await next(e)`). Hooks nest in `enabledPlugins` order in `~/.claude/settings.json`, first on top. `band-rule` draws the separator line and must be listed before the other mods. Reorder by editing the lines in that object, then `/reload-plugins`; `claude plugin install` appends at the end. Current order: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `goal-meter`, `recording-mode`, `usage-limits`.
 
+Every band's title chip is 11 cells wide (the label padded to match ` ⇄ CONTEXT `), so the colored column lines up; keep new chips at 11 and `CHIP_WIDTH` in `agent-watch` in step. Band text starts one space after the chip in every mod.
+
 Progress bars are `▆` cells (three-quarter height, so stacked bars keep a gap): the filled part in the status color, the empty part in the same block in gray (`TRACK`), drawn as a nested `Text` run. `usage-limits` is the exception and uses `█`/`░`, because `SessionMode` only takes plain strings.
 
 ## Versioning

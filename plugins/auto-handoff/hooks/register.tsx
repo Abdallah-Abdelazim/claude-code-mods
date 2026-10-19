@@ -234,7 +234,7 @@ export const register: Register = on => {
         <Box>
           <Text bold color="#0b0b0f" backgroundColor="#a78bfa"> ⇄ CONTEXT </Text>
           <Text color={fill === null ? '#a1a1aa' : toneOf(fill, s.threshold)}>
-            {'  ctx '}
+            {' ctx '}
             {cells ? cells.on : '—'}
             {cells && <Text color={TRACK}>{cells.off}</Text>}
             {'  '}
