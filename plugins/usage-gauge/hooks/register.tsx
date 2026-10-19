@@ -162,7 +162,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#60a5fa"> ◔ PLAN </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#60a5fa"> ◔ USAGE </Text>
           {limits.map((l, i) => (
             <Text color={toneOf(l.percent)}>
               {i ? '  │ ' : '  '}
