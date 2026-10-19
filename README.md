@@ -19,6 +19,8 @@ Mods for Claude Code that add a band above the prompt, a side pane or a slash co
 
 Bands stack in the order their plugins appear in `enabledPlugins` in `~/.claude/settings.json`, first on top. To reorder, move the lines and run `/reload-plugins`; `claude plugin install` adds new entries at the end. `band-rule` draws its line above the whole stack only when it is listed first. The author's order, top to bottom: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `goal-meter`, `recording-mode`, `usage-limits`. The last one draws in the footer, so its place doesn't matter. The Band column is the title each mod shows in its band.
 
+Each band is one row. In a narrow terminal the end of the row is cut off with `…` instead of wrapping.
+
 `usage-gauge` and `usage-limits` both show plan usage, so enable only one.
 
 In `auto` mode, `auto-handoff` sends the handoff prompt as soon as the threshold is crossed, even while Claude is mid-task. The default `ask` mode only offers the button.
