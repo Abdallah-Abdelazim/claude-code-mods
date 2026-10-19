@@ -32,6 +32,10 @@ Every plugin's `version` in `plugins/*/.claude-plugin/plugin.json` equals the ma
 2. Commit, then `git tag -a vX.Y.Z -m vX.Y.Z` and push the branch and the tag.
 3. `direnv exec . gh release create vX.Y.Z --title vX.Y.Z --notes "..."`. `.envrc` / `.envrc.local` (git-ignored) set a personal `GITHUB_TOKEN`; the global one belongs to a work account that cannot write this repo.
 
+## Before committing
+
+Check whether `README.md` and this file need to change, and update them in the same commit. Typical triggers: a plugin added, removed or renamed; a command or option changed; a band title or band order changed; a new convention, release step or gotcha.
+
 ## Checks
 
 ```
