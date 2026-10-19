@@ -162,7 +162,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#60a5fa"> ◔ USAGE   </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#e0af68"> ◔ USAGE   </Text>
           {limits.map((l, i) => {
             const cells = bar(l.percent, 6)
             return (

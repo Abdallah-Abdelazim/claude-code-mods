@@ -99,7 +99,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#ffffff" backgroundColor="#ef4444"> ● REC     </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#f7768e"> ● REC     </Text>
           <Text dimColor>{mode === 'strict' ? ' masking on screen (strict)' : ' masking on screen'}</Text>
         </Box>
         {below}

@@ -232,7 +232,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#a78bfa"> ⇄ CONTEXT </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#7aa2f7"> ⇄ CONTEXT </Text>
           <Text color={fill === null ? '#a1a1aa' : toneOf(fill, s.threshold)}>
             {' ctx '}
             {cells ? cells.on : '—'}

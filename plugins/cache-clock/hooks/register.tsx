@@ -112,7 +112,7 @@ export const register: Register = (on, options) => {
     return (
       <Box flexDirection="column">
         <Box>
-          <Text bold color="#0b0b0f" backgroundColor="#22d3ee"> ● CACHE   </Text>
+          <Text bold color="#0b0b0f" backgroundColor="#7dcfff"> ● CACHE   </Text>
           <Text color={tone}> {state} {barOn}<Text color={TRACK}>{barOff}</Text></Text>
           <Text dimColor>{'  '}{reuse} · {cached} cached · cold rewrite {rewrite} </Text>
           <Button key="compact" plain label="[Compact]" onPress={() => compact($)} />
