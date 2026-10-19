@@ -1,6 +1,6 @@
 {
   "name": "band-rule",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": { "name": "Abdallah Abdelazim" },
   "description": "Draws one dim line above the mod bands to separate them from Claude's output. List it before the other mods."
 }
