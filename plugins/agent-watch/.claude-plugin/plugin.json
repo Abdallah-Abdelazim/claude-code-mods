@@ -1,6 +1,6 @@
 {
   "name": "agent-watch",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": { "name": "Abdallah Abdelazim" },
   "description": "Shows the main chat, helper agents, their models, tasks and skills for the current turn.",
   "types": "./types/index.d.ts"
