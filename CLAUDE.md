@@ -20,7 +20,7 @@ plugins/<name>/
 
 ## Bands
 
-Each `AbovePrompt` hook draws its row and wraps the band below it (`const below = await next(e)`). Hooks nest in `enabledPlugins` order in `~/.claude/settings.json`, first on top. `band-rule` draws the separator line and must be listed before the other mods.
+Each `AbovePrompt` hook draws its row and wraps the band below it (`const below = await next(e)`). Hooks nest in `enabledPlugins` order in `~/.claude/settings.json`, first on top. `band-rule` draws the separator line and must be listed before the other mods. Reorder by editing the lines in that object, then `/reload-plugins`; `claude plugin install` appends at the end. Current order: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `goal-meter`, `recording-mode`, `usage-limits`.
 
 ## Versioning
 

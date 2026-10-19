@@ -15,7 +15,7 @@ Claude Code mods that add a line above the prompt, a pane or a slash command. Ea
 | `goal-meter` | Progress bar for the task list Claude is working through, with ETA. Pane with every task and the last 5 goals. | `/goals` (opens the Goals pane), `on \| off \| clear \| help` |
 | `recording-mode` | For screen recordings: masks keys, tokens, emails, phones and your private words on screen, and tells the model to keep them off. | `/rec`, `/rec strict`, `/rec off`, `/rec hide <word>`, `/rec unhide <word>`, `/rec list`, `/rec test <text>` |
 
-`band-rule` only sits above the whole stack when it is the first of these mods in `enabledPlugins` in `~/.claude/settings.json`; mods nest in that order, first on top.
+The bands stack in the order the mods are listed in `enabledPlugins` in `~/.claude/settings.json`, first on top (reorder the lines, then `/reload-plugins`; `claude plugin install` appends at the end). `band-rule` only sits above the whole stack when it is listed first. The author's order, top to bottom: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `goal-meter`, `recording-mode`, `usage-limits` (footer, so its place does not matter).
 
 `usage-gauge` and `usage-limits` both show plan usage. Enable one of them, not both.
 
