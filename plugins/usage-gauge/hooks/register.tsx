@@ -4,6 +4,7 @@ import type { EngineInterface as Engine, Register, SessionMeasureInput, SessionR
 import type { Limit } from '../types'
 import { bar, countdown, outIn, resetText, shortName, titleName, toneOf } from './format'
 
+const KEY = 'usage-gauge'
 const PANE = 'usage-gauge'
 const USAGE = 'Usage: /usage-gauge | on | off | warn <low> <high> | status'
 const TICK_MS = 30_000
@@ -19,6 +20,17 @@ const paceA = atom({ plugin: 'usage-gauge', key: 'pace' } as const, null)
 
 const toLimits = (list: readonly SessionRateLimit[]): Limit[] =>
   list.map(r => ({ kind: r.kind, percent: r.percentUsed, resetsAt: r.resetsAt ?? null }))
+
+async function load($: Engine) {
+  const saved = (await $.store.get(KEY)) as { isOn?: boolean; low?: number; high?: number } | null
+  await update($, isOnA, () => saved?.isOn ?? true)
+  await update($, thresholdsA, t => ({ low: saved?.low ?? t.low, high: saved?.high ?? t.high }))
+}
+
+async function save($: Engine) {
+  const { low, high } = await read($, thresholdsA)
+  await $.store.set(KEY, { isOn: await read($, isOnA), low, high })
+}
 
 async function seed($: Engine) {
   const usage = await $.session.usage().catch(() => null)
@@ -87,8 +99,8 @@ export const register: Register = on => {
       description: 'Show plan usage, reset times and session cost.',
       argumentHint: 'on | off | warn <low> <high> | status',
     })
+    await load($)
     await seed($)
-    $.ui.status(undefined)
     $.clock.every(TICK_MS, () => $.ui.invalidate('ui.render'))
 
     return next(e)
@@ -114,6 +126,7 @@ export const register: Register = on => {
     }
     if (cmd === 'on' || cmd === 'off') {
       await update($, isOnA, () => cmd === 'on')
+      await save($)
       return { text: `Usage gauge ${cmd}.` }
     }
     if (cmd === 'warn') {
@@ -123,6 +136,7 @@ export const register: Register = on => {
         return { text: 'Usage: /usage-gauge warn <low> <high>, whole numbers 1 to 100, low below high.' }
       }
       await update($, thresholdsA, () => ({ low, high }))
+      await save($)
       return { text: `Toasts at ${low}% and ${high}%.` }
     }
     if (cmd === 'status') return { text: await summary($) }

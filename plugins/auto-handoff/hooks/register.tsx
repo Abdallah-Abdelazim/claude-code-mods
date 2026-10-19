@@ -6,6 +6,7 @@ import { FILE, RESUME_PROMPT, agoLong, agoShort, bar, clockTime, firstObjective,
 
 const KEY = 'auto-handoff'
 const FRESH_MS = 10 * 60_000
+const SAVE_TIMEOUT_MS = 10 * 60_000
 const DEFAULTS: HandoffSettings = { isOn: true, threshold: 80, mode: 'ask', isHidden: false }
 const USAGE = 'Usage: /auto-handoff on | off | now | resume | threshold <n> | mode auto|ask | hide | show | status'
 
@@ -50,7 +51,7 @@ async function start($: Engine) {
     await update($, seenMtimeA, () => handoff.mtimeMs)
     const objective = firstObjective(await $.fs.read(handoff.file))
     await update($, staleA, () => ({ objective, mtimeMs: handoff.mtimeMs }))
-    $.ui.toast(`Handoff from ${agoLong(now - handoff.mtimeMs)} available — /handoff resume`)
+    $.ui.toast(`Handoff from ${agoLong(now - handoff.mtimeMs)} available — /auto-handoff resume`)
   }
 }
 
@@ -59,7 +60,8 @@ async function onMeasure($: Engine, e: SessionMeasureInput) {
   await update($, fillA, () => fill)
   if (fill === null) return
 
-  const { threshold, mode } = await read($, settingsA)
+  const { threshold, mode, isOn } = await read($, settingsA)
+  if (!isOn) return
   if (fill < threshold) {
     await update($, warnedA, () => false)
     if ((await read($, phaseA)) === 'due') await update($, phaseA, () => 'idle')
@@ -88,8 +90,13 @@ async function runSave($: Engine) {
 async function checkSaved($: Engine) {
   if ((await read($, phaseA)) !== 'saving') return
   const since = await read($, savingSinceA)
-  const handoff = await handoffOf($, await $.clock.now())
-  if (since === null || !handoff || handoff.mtimeMs < since) return
+  const now = await $.clock.now()
+  const handoff = await handoffOf($, now)
+  if (since === null || !handoff || handoff.mtimeMs < since) {
+    // An interrupted turn or a handoff written elsewhere would otherwise leave the band stuck on "saving".
+    if (since === null || now - since > SAVE_TIMEOUT_MS) await update($, phaseA, () => 'idle')
+    return
+  }
 
   await update($, phaseA, () => 'saved')
   await update($, savedAtA, () => handoff.mtimeMs)
@@ -109,7 +116,7 @@ async function runResume($: Engine) {
 async function runClear($: Engine) {
   const cleared = await $.command.run({ command: 'clear' }).then(() => true, () => false)
   if (!cleared) {
-    $.ui.toast('Could not run /clear. Type /clear, then /handoff resume.')
+    $.ui.toast('Could not run /clear. Type /clear, then /auto-handoff resume.')
     return
   }
   await update($, phaseA, () => 'idle')

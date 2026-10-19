@@ -16,6 +16,7 @@ export type WatchEvent = { at: number; text: string }
 
 declare module 'claude-code' {
   interface PluginState {
+    'recording-mode': { mode: 'off' | 'on' | 'strict' }
     'agent-watch': {
       isOn: boolean
       agents: WatchAgent[]

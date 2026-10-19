@@ -125,6 +125,12 @@ export const register: Register = on => {
     return next(props ? { ...e, props } : e)
   })
 
+  on('ui.render', { component: 'InfoNotice' }, async ($, e, next) => {
+    const props = await maskedProps($, e.props, ['text'])
+
+    return next(props ? { ...e, props } : e)
+  })
+
   on('ui.render', { component: 'ToolUse' }, async ($, e, next) => {
     const props = await maskedProps($, e.props, ['input', 'output'])
 

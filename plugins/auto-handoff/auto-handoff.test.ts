@@ -3,6 +3,22 @@ import { expect, mock, test } from 'claude-code/testing'
 const NOW = Date.parse('2026-10-19T12:00:00Z')
 const PROPS = { hasSurvey: false, isWorking: false, maxRows: 4, bodyColumns: 80, scroll: { offset: 0, bodyRows: 4 }, view: {} }
 
+test('measure does nothing while auto-handoff is off', async ($, on) => {
+  mock.clock(on, { now: NOW })
+  mock.store(on)
+  const toasts: string[] = []
+  on('ui.toast', ($, e, next) => {
+    toasts.push(e.text)
+    return next(e)
+  })
+  on('session.measure', ($, e) => ({ changed: e.changed }))
+
+  await $.command.run({ command: 'auto-handoff', args: 'off' } as never)
+  await $.session.measure({ context: { window: 200_000, percent: 90 }, rateLimits: [], changed: ['context'] })
+
+  expect(toasts).toEqual([])
+})
+
 for (const surface of ['terminal', 'desktop'] as const) {
   test(`the threshold toasts once on ${surface}`, async ($, on) => {
     mock.clock(on, { now: NOW })

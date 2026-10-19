@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { bar, line } from './format'
+import { bar, line } from './hooks/format'
 
 test('bar fills proportionally and clamps', () => {
   expect(bar(0)).toBe('░░░░░░░░░░')

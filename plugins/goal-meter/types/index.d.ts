@@ -11,6 +11,7 @@ export type GoalRecord = { name: string; tasks: number; ms: number; at: number }
 
 declare module 'claude-code' {
   interface PluginState {
+    'recording-mode': { mode: 'off' | 'on' | 'strict' }
     'goal-meter': {
       isOn: boolean
       goal: GoalState | null

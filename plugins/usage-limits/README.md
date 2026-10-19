@@ -13,11 +13,10 @@ The bars appear next to the session mode indicator and update whenever Claude Co
 From inside Claude Code:
 
 ```
-/plugin marketplace add Abdallah-Abdelazim/usage-limits-cc-mod
-/plugin install usage-limits@usage-limits-local
+/plugin install usage-limits --marketplace <path-or-owner>/claude-code-mods
 ```
 
-Then reload plugins (or restart the session).
+See the [root README](../../README.md) for details, then reload plugins (or restart the session).
 
 ## How it works
 
@@ -38,8 +37,8 @@ hooks/
   hooks.json     module manifest
   register.ts    hook registration
   format.ts      bar / line formatting
-  format.test.ts tests (claude-code/testing)
 types/index.d.ts plugin state typings
+usage-limits.test.ts tests (claude-code/testing)
 ```
 
 Tests use the `claude-code/testing` harness provided by Claude Code.

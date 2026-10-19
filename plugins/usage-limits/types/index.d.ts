@@ -1,5 +1,7 @@
+export type LimitsText = string | null
+
 declare module 'claude-code' {
   interface PluginState {
-    'usage-limits': { text: string | null }
+    'usage-limits': { text: LimitsText }
   }
 }

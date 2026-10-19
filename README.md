@@ -7,14 +7,18 @@ Claude Code mods that add a line above the prompt, a pane or a slash command. Ea
 | Plugin | What it does | Command |
 | --- | --- | --- |
 | `cache-clock` | Shows whether the prompt cache is still warm, the time left, % reused and the cold-rewrite cost, with a Compact button. Toasts at 5 minutes left. | `/cache-clock on \| off \| status` |
-| `usage-gauge` | Plan windows (5h, week, others) with reset times, session cost, toasts at 75% and 90%, and a pace warning. | `/usage-gauge on \| off \| warn <a> <b> \| status` |
+| `usage-gauge` | Plan windows (5h, week, others) with reset times, session cost, toasts at 75% and 90%, and a pace warning. | `/usage-gauge` (opens a pane), `on \| off \| warn <a> <b> \| status` |
 | `usage-limits` | Session (5h) and week (7d) rate-limit bars in the prompt footer. | none |
 | `auto-handoff` | Watches how full the chat is and saves a `HANDOFF.md` at a threshold, then offers clear and resume. | `/auto-handoff on \| off \| now \| resume \| threshold <n> \| mode auto\|ask \| hide \| show \| status` |
-| `agent-watch` | Shows the main chat, helper agents, their models and tasks, and the skills that ran this turn. Side pane "Agents". | `/agent-watch on \| off \| clear \| help` |
-| `goal-meter` | Progress bar for the task list Claude is working through, with ETA. Pane with every task and the last 5 goals. | `/goals on \| off \| clear \| help` |
+| `agent-watch` | Shows the main chat, helper agents, their models and tasks, and the skills that ran this turn. Side pane "Agents". | `/agent-watch` (opens the Agents pane), `on \| off \| clear \| help` |
+| `goal-meter` | Progress bar for the task list Claude is working through, with ETA. Pane with every task and the last 5 goals. | `/goals` (opens the Goals pane), `on \| off \| clear \| help` |
 | `recording-mode` | For screen recordings: masks keys, tokens, emails, phones and your private words on screen, and tells the model to keep them off. | `/rec`, `/rec strict`, `/rec off`, `/rec hide <word>`, `/rec unhide <word>`, `/rec list`, `/rec test <text>` |
 
 `usage-gauge` and `usage-limits` both show plan usage. Enable one of them, not both.
+
+In `auto-handoff`'s `auto` mode the handoff prompt is sent as soon as the threshold is crossed, even if Claude is in the middle of a task. The default mode, `ask`, only offers the button.
+
+While `recording-mode` is on, `goal-meter` and `agent-watch` hide goal and task text too.
 
 Settings: `cache-clock` has a `cacheMinutes` option (`5` or `60`, default `60`). The other settings live in the mods' commands and are remembered between sessions.
 

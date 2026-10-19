@@ -13,8 +13,10 @@ const warnedFor = atom({ plugin: 'cache-clock', key: 'warnedFor' } as const, nul
 const isOn = atom({ plugin: 'cache-clock', key: 'isOn' } as const, true)
 
 const TICK_MS = 30_000
-const AMBER_MS = 15 * 60_000
-const WARN_MS = 5 * 60_000
+const KEY = 'cache-clock'
+// Both windows shrink with the cache lifetime, so a 5-minute cache is not "amber" or "about to expire" from the start.
+const amberMs = (ttlMs: number) => ttlMs / 4
+const warnMs = (ttlMs: number) => Math.min(5 * 60_000, ttlMs / 5)
 const BAR = 6
 
 // Ms until the cache goes cold; 0 when cold or no main request has cached yet.
@@ -31,10 +33,11 @@ const compact = async ($: Engine) => {
 const tick = async ($: Engine, ttl: number) => {
   const at = await read($, lastCacheAt)
   const step = await read($, lastStep)
-  const left = await remaining($, ttl * 60_000)
+  const ttlMs = ttl * 60_000
+  const left = await remaining($, ttlMs)
   if (
     at !== null && step !== null && (await read($, isOn)) &&
-    left > 0 && left <= WARN_MS && (await read($, warnedFor)) !== at
+    left > 0 && left <= warnMs(ttlMs) && (await read($, warnedFor)) !== at
   ) {
     await update($, warnedFor, () => at)
     $.ui.toast(
@@ -54,6 +57,8 @@ export const register: Register = (on, options) => {
       description: 'Show or toggle the prompt-cache clock.',
       argumentHint: 'on | off | status',
     })
+    const saved = (await $.store.get(KEY)) as { isOn?: boolean } | null
+    await update($, isOn, () => saved?.isOn ?? true)
     $.clock.every(TICK_MS, () => tick($, ttl))
     return next(e)
   })
@@ -93,7 +98,7 @@ export const register: Register = (on, options) => {
     const step = await read($, lastStep)
     const left = await remaining($, ttlMs)
     const isCold = left <= 0
-    const tone = isCold ? '#ef4444' : left <= AMBER_MS ? '#f59e0b' : '#22c55e'
+    const tone = isCold ? '#ef4444' : left <= amberMs(ttlMs) ? '#f59e0b' : '#22c55e'
     const filled = Math.max(0, Math.min(BAR, Math.round((BAR * left) / ttlMs)))
     const bar = '▰'.repeat(filled) + '▱'.repeat(BAR - filled)
     const state = isCold ? 'COLD' : `warm ${Math.ceil(left / 60_000)}m`
@@ -118,6 +123,7 @@ export const register: Register = (on, options) => {
   on('command.run', { command: 'cache-clock' }, async ($, e) => {
     const arg = e.args.trim()
     if (arg === 'on' || arg === 'off') {
+      await $.store.set(KEY, { isOn: arg === 'on' })
       await update($, isOn, () => arg === 'on')
       return { text: `Cache clock ${arg}.` }
     }

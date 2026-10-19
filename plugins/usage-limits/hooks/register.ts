@@ -7,7 +7,7 @@ const text = atom({ plugin: 'usage-limits', key: 'text' } as const, null)
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
-    const latest = line((await $.session.usage()).rateLimits) ?? null
+    const latest = line((await $.session.usage().catch(() => null))?.rateLimits ?? []) ?? null
     await update($, text, () => latest)
 
     return next(e)

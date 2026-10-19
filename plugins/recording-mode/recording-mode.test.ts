@@ -27,6 +27,27 @@ test('strict also hides amounts and home paths, and private words become [privat
   expect(maskText('cost $12.50 in /Users/jo/app', quiet)).toBe('cost $12.50 in /Users/jo/app')
 })
 
+test('masks JWTs, private-key blocks, Stripe and Google keys', () => {
+  const out = maskText(
+    'jwt eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.abcdefghijklmn stripe sk_live_abcdefghijklmnop1234 ' +
+      'google AIzaSyA1234567890abcdefghijklmnopqrstuv\n-----BEGIN RSA PRIVATE KEY-----\nMIIEabc\n-----END RSA PRIVATE KEY-----\nafter',
+    quiet,
+  )
+  expect(out).toBe('jwt [key] stripe [key] google [key]\n[key]\nafter')
+})
+
+test('only upper-case secret names are masked', () => {
+  const text = 'input_tokens: 5\nmax_tokens = 4096\nhotkey: ctrl+o\nmonkey=1\nSECRET_KEY_BASE=abc123'
+  expect(maskText(text, quiet)).toBe('input_tokens: 5\nmax_tokens = 4096\nhotkey: ctrl+o\nmonkey=1\nSECRET_KEY_BASE=[key]')
+})
+
+test('private words match whole words and leave placeholders alone', () => {
+  const cfg = { strict: false, words: ['key', 'mail'] }
+  expect(maskText('key sk-abcdefghijklmnop1234 mailbox mail me@corp.example.com', cfg)).toBe(
+    '[private] [key] mailbox [private] [email]',
+  )
+})
+
 for (const surface of ['terminal', 'desktop'] as const) {
   test(`recording mode masks only the drawn text and stacks its band on ${surface}`, async ($, on) => {
     mock.clock(on, { now: Date.parse('2026-10-19T12:00:00Z') })

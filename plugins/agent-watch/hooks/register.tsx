@@ -15,6 +15,13 @@ const modelsA = atom({ plugin: 'agent-watch', key: 'models' } as const, {})
 const timelineA = atom({ plugin: 'agent-watch', key: 'timeline' } as const, [])
 const turnStartA = atom({ plugin: 'agent-watch', key: 'turnStart' } as const, null)
 const activeA = atom({ plugin: 'agent-watch', key: 'active' } as const, 'main')
+// Owned by recording-mode; while it is on, task text stays off screen.
+const recA = atom({ plugin: 'recording-mode', key: 'mode' } as const, 'off')
+
+async function shownAgents($: Engine) {
+  const agents = await read($, agentsA)
+  return (await read($, recA)) === 'off' ? agents : agents.map(a => ({ ...a, task: '' }))
+}
 
 const fmtTokens = (n: number) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : `${n}`)
 
@@ -59,7 +66,7 @@ async function startTurn($: Engine, text: string) {
 }
 
 async function recordSpawn($: Engine, e: AgentSpawnInput, r: AgentSpawnResult) {
-  const parent = await read($, activeA)
+  const parent = e.parentAgentId ?? 'main'
   const id = r.agentId ?? e.tool_use_id
   const task = e.description || e.prompt.split('\n')[0] || ''
   const row: WatchAgent = {
@@ -118,7 +125,7 @@ export const register: Register = on => {
     await update($, activeA, () => e.agentId ?? 'main')
     const result = yield* next(e)
     const u = result.usage
-    await recordStep($, e.agentId, u?.model ?? e.model, u ? u.input_tokens + u.output_tokens : 0)
+    await recordStep($, e.agentId, u?.model ?? e.model, u ? u.input_tokens + u.output_tokens + u.cache_read_input_tokens + u.cache_creation_input_tokens : 0)
 
     return result
   })
@@ -168,7 +175,7 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const below = await next(e)
-    const agents = await read($, agentsA)
+    const agents = await shownAgents($)
     if (!(await read($, isOnA))) return below
 
     const { Box, Text } = $.ui.resolve(e)
@@ -192,7 +199,7 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
     const { Box, Text } = $.ui.resolve(e)
-    const agents = await read($, agentsA)
+    const agents = await shownAgents($)
     const models = await read($, modelsA)
     const timeline = await read($, timelineA)
     const turnStart = await read($, turnStartA)

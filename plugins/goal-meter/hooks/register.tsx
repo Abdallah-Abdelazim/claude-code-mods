@@ -16,6 +16,8 @@ const goalA = atom({ plugin: 'goal-meter', key: 'goal' } as const, null)
 const nextNameA = atom({ plugin: 'goal-meter', key: 'nextName' } as const, null)
 const promptAtA = atom({ plugin: 'goal-meter', key: 'promptAt' } as const, null)
 const historyA = atom({ plugin: 'goal-meter', key: 'history' } as const, [])
+// Owned by recording-mode; while it is on, goal text stays off screen.
+const recA = atom({ plugin: 'recording-mode', key: 'mode' } as const, 'off')
 
 async function load($: Engine) {
   const settings = (await $.store.get(KEY)) as { isOn?: boolean } | null
@@ -83,13 +85,19 @@ async function recordTaskUpdate($: Engine, id: string, patch: TaskPatch) {
 async function commitTasks($: Engine, build: (prev: GoalTask[], now: number) => GoalTask[]) {
   const now = await $.clock.now()
   const current = await read($, goalA)
-  const goal = current && current.doneAt === null ? current : null
-  const tasks = build(goal?.tasks ?? [], now)
+  let goal = current && current.doneAt === null ? current : null
+  let tasks = build(goal?.tasks ?? [], now)
+  const promptAt = await read($, promptAtA)
+  // A prompt sent since the goal began, with a task list that shares nothing with it, is a new goal.
+  if (goal && promptAt !== null && promptAt > goal.startedAt && !tasks.some(t => goal?.tasks.some(p => p.content === t.content))) {
+    goal = null
+    tasks = build([], now)
+  }
   if (tasks.length === 0) return
   const isDone = tasks.length > 0 && tasks.every(t => t.status === 'completed')
   const next: GoalState = {
     name: goal?.name ?? (await read($, nextNameA)) ?? 'goal',
-    startedAt: goal?.startedAt ?? (await read($, promptAtA)) ?? now,
+    startedAt: goal?.startedAt ?? promptAt ?? now,
     tasks,
     doneAt: isDone ? now : null,
   }
@@ -177,6 +185,7 @@ export const register: Register = on => {
     if (!(await read($, isOnA))) return below
 
     const { Box, Text } = $.ui.resolve(e)
+    const isHidden = (await read($, recA)) !== 'off'
     if (!goal || goal.tasks.length === 0 || (isDone && now - (goal.doneAt ?? now) >= SHOW_DONE_MS)) {
       return (
         <Box flexDirection="column">
@@ -195,7 +204,7 @@ export const register: Register = on => {
       <Box flexDirection="column">
         <Box>
           <Text bold color="#0b0b0f" backgroundColor="#facc15"> ◆ GOAL </Text>
-          <Text>{` ${goal.name}`}</Text>
+          <Text>{` ${isHidden ? 'goal' : goal.name}`}</Text>
           <Text color={isDone ? GREEN : tone}>{'  '}{bar(s.pct)}</Text>
           {isDone ? (
             <Text color={GREEN}>{'  done ✓ in '}{fmtMin((goal.doneAt ?? now) - goal.startedAt)}</Text>
@@ -203,7 +212,7 @@ export const register: Register = on => {
             <Text>{`  ${s.done}/${s.total} · ${s.pct}% · ${fmtMin(now - goal.startedAt)}`}</Text>
           )}
           {!isDone && s.eta !== null && <Text dimColor>{'  ETA ~'}{fmtMin(s.eta)}</Text>}
-          {!isDone && s.running && <Text dimColor>{'  │ ▶ '}{s.running.activeForm || s.running.content}</Text>}
+          {!isDone && s.running && !isHidden && <Text dimColor>{'  │ ▶ '}{s.running.activeForm || s.running.content}</Text>}
         </Box>
         {below}
       </Box>
@@ -215,19 +224,21 @@ export const register: Register = on => {
     const goal = await read($, goalA)
     const history = await read($, historyA)
     const now = await $.clock.now()
+    const isHidden = (await read($, recA)) !== 'off'
+    const mask = (text: string) => (isHidden ? '•••' : text)
 
     return (
       <Box flexDirection="column">
-        <Text bold>{goal ? goal.name : 'No goal yet.'}</Text>
+        <Text bold>{goal ? mask(goal.name) : 'No goal yet.'}</Text>
         {goal?.tasks.map(t => (
           <Text dimColor={t.status === 'pending'} color={t.status === 'in_progress' ? AMBER : t.status === 'completed' ? GREEN : undefined}>
-            {t.status === 'in_progress' ? '▶' : t.status === 'completed' ? '✓' : '○'} {t.content}
+            {t.status === 'in_progress' ? '▶' : t.status === 'completed' ? '✓' : '○'} {mask(t.content)}
             {taskTime(t, now) ? `  ${taskTime(t, now)}` : ''}
           </Text>
         ))}
         {history.length > 0 && <Text bold>Last goals</Text>}
         {history.map(h => (
-          <Text dimColor>{'  '}{h.name} — {h.tasks} tasks · {fmtMin(h.ms)}</Text>
+          <Text dimColor>{'  '}{mask(h.name)} — {h.tasks} tasks · {fmtMin(h.ms)}</Text>
         ))}
       </Box>
     )

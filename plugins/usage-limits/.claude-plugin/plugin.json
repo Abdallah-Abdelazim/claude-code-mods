@@ -1,1 +1,1 @@
-{ "name": "usage-limits", "version": "1.0.0", "author": { "name": "Abdallah Abdelazim" }, "description": "Progress bars for the session (5h) and week (7d) rate limits in the prompt footer", "types": "./types/index.d.ts" }
+{ "name": "usage-limits", "version": "1.0.1", "author": { "name": "Abdallah Abdelazim" }, "description": "Progress bars for the session (5h) and week (7d) rate limits in the prompt footer", "types": "./types/index.d.ts" }
