@@ -1,6 +1,6 @@
 {
   "name": "auto-handoff",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": { "name": "Abdallah Abdelazim" },
   "description": "Watches chat fill, saves a HANDOFF.md at a threshold, and offers a clean resume.",
   "types": "./types/index.d.ts"
