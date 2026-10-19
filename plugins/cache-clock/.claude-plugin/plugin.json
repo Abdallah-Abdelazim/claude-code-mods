@@ -1,0 +1,16 @@
+{
+  "name": "cache-clock",
+  "version": "0.1.0",
+  "author": { "name": "Abdallah Abdelazim" },
+  "description": "Shows whether Claude's prompt cache is still warm, with the cold-rewrite cost and a Compact button.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "cacheMinutes": {
+      "type": "string",
+      "title": "Cache lifetime (minutes)",
+      "description": "The cache TTL to assume: 5 or 60.",
+      "options": ["5", "60"],
+      "default": "60"
+    }
+  }
+}

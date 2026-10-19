@@ -1,0 +1,13 @@
+{
+  "name": "claude-code-mods",
+  "owner": { "name": "Abdallah Abdelazim" },
+  "plugins": [
+    { "name": "cache-clock", "source": "./plugins/cache-clock" },
+    { "name": "usage-gauge", "source": "./plugins/usage-gauge" },
+    { "name": "auto-handoff", "source": "./plugins/auto-handoff" },
+    { "name": "agent-watch", "source": "./plugins/agent-watch" },
+    { "name": "goal-meter", "source": "./plugins/goal-meter" },
+    { "name": "recording-mode", "source": "./plugins/recording-mode" },
+    { "name": "usage-limits", "source": "./plugins/usage-limits" }
+  ]
+}

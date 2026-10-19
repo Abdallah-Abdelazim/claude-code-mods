@@ -1,0 +1,7 @@
+{
+  "name": "goal-meter",
+  "version": "0.1.0",
+  "author": { "name": "Abdallah Abdelazim" },
+  "description": "A live progress bar for the task list Claude is working through, named after the prompt that started it.",
+  "types": "./types/index.d.ts"
+}
