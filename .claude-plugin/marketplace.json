@@ -2,10 +2,11 @@
   "name": "claude-code-mods",
   "owner": { "name": "Abdallah Abdelazim" },
   "metadata": {
-    "description": "Claude Code mods: cache clock, usage gauge, usage limits, auto handoff, agent watch, goal meter and recording mode.",
+    "description": "Claude Code mods: band rule, cache clock, usage gauge, usage limits, auto handoff, agent watch, goal meter and recording mode.",
     "version": "1.0.2"
   },
   "plugins": [
+    { "name": "band-rule", "source": "./plugins/band-rule" },
     { "name": "cache-clock", "source": "./plugins/cache-clock" },
     { "name": "usage-gauge", "source": "./plugins/usage-gauge" },
     { "name": "auto-handoff", "source": "./plugins/auto-handoff" },
