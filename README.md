@@ -30,10 +30,10 @@ Settings: `cache-clock` has a `cacheMinutes` option (`5` or `60`, default `60`).
 From this folder, add it as a marketplace and install what you want:
 
 ```
-/plugin install cache-clock --marketplace ~/SoftwareProjects/claude-code-mods
+/plugin install cache-clock --marketplace Abdallah-Abdelazim/claude-code-mods
 ```
 
-Repeat with another plugin name for each mod. Once the repo is on GitHub, use `--marketplace <owner>/claude-code-mods` instead.
+Repeat with another plugin name for each mod. From a local clone, use `--marketplace ~/path/to/claude-code-mods` instead.
 
 To try one without installing: `claude --plugin-dir plugins/<name>`.
 
@@ -43,7 +43,7 @@ These mods use Claude Code's function-hook plugin API, which is early access and
 
 ## Develop
 
-Each folder under `plugins/` is a standalone mod: `.claude-plugin/plugin.json`, `hooks/`, `types/` (where the mod keeps state) and a `*.test.ts`.
+Each folder under `plugins/` is a standalone mod: `.claude-plugin/plugin.json`, `hooks/`, `tsconfig.json`, a `*.test.ts` and, for a mod that keeps state, `types/index.d.ts`. See [CLAUDE.md](CLAUDE.md) for the conventions and the release steps.
 
 ```
 claude plugin validate plugins/<name>
