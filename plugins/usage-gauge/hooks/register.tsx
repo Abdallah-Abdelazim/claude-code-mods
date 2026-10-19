@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface as Engine, Register, SessionMeasureInput, SessionRateLimit } from 'claude-code'
 
 import type { Limit } from '../types'
-import { bar, countdown, outIn, resetText, shortName, titleName, toneOf } from './format'
+import { TRACK, bar, countdown, outIn, resetText, shortName, titleName, toneOf } from './format'
 
 const KEY = 'usage-gauge'
 const PANE = 'usage-gauge'
@@ -163,16 +163,21 @@ export const register: Register = on => {
       <Box flexDirection="column">
         <Box>
           <Text bold color="#0b0b0f" backgroundColor="#60a5fa"> ◔ USAGE </Text>
-          {limits.map((l, i) => (
-            <Text color={toneOf(l.percent)}>
-              {i ? '  │ ' : '  '}
-              {shortName(l.kind)} {bar(l.percent, 6)}{'  '}{Math.round(l.percent)}%
-              {l.resetsAt ? ` ↻${resetText(l.kind, l.resetsAt, now)}` : ''}
-            </Text>
-          ))}
+          {limits.map((l, i) => {
+            const cells = bar(l.percent, 6)
+            return (
+              <Text color={toneOf(l.percent)}>
+                {i ? '  │ ' : '  '}
+                {shortName(l.kind)} {cells.on}<Text color={TRACK}>{cells.off}</Text>{'  '}{Math.round(l.percent)}%
+                {l.resetsAt ? ` ↻${resetText(l.kind, l.resetsAt, now)}` : ''}
+              </Text>
+            )
+          })}
           {out !== null && <Text color="#f59e0b">{'  ⚠ at this pace: out in '}{countdown(out)}</Text>}
           {limits.length === 0 && context !== null && (
-            <Text color={toneOf(context)}>{'  context '}{bar(context, 6)}{'  '}{Math.round(context)}%</Text>
+            <Text color={toneOf(context)}>
+              {'  context '}{bar(context, 6).on}<Text color={TRACK}>{bar(context, 6).off}</Text>{'  '}{Math.round(context)}%
+            </Text>
           )}
           {cost !== null && (
             <Text dimColor>
@@ -202,15 +207,18 @@ export const register: Register = on => {
 
     return (
       <Box flexDirection="column">
-        {limits.map(l => (
-          <Text color={toneOf(l.percent)}>
-            {shortName(l.kind).padEnd(7)} {bar(l.percent, cells)}{'  '}{Math.round(l.percent)}%
-            {l.resetsAt ? `  ↻ ${resetText(l.kind, l.resetsAt, now)}` : ''}
-          </Text>
-        ))}
+        {limits.map(l => {
+          const row = bar(l.percent, cells)
+          return (
+            <Text color={toneOf(l.percent)}>
+              {shortName(l.kind).padEnd(7)} {row.on}<Text color={TRACK}>{row.off}</Text>{'  '}{Math.round(l.percent)}%
+              {l.resetsAt ? `  ↻ ${resetText(l.kind, l.resetsAt, now)}` : ''}
+            </Text>
+          )
+        })}
         {context !== null && (
           <Text color={toneOf(context)}>
-            {'context'.padEnd(7)} {bar(context, cells)}{'  '}{Math.round(context)}%
+            {'context'.padEnd(7)} {bar(context, cells).on}<Text color={TRACK}>{bar(context, cells).off}</Text>{'  '}{Math.round(context)}%
           </Text>
         )}
         {cost !== null && (

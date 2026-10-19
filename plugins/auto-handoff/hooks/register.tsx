@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface as Engine, Register, SessionMeasureInput } from 'claude-code'
 
 import type { HandoffSettings } from '../types'
-import { FILE, RESUME_PROMPT, agoLong, agoShort, bar, clockTime, firstObjective, handoffPrompt, toneOf } from './format'
+import { FILE, RESUME_PROMPT, agoLong, agoShort, TRACK, bar, clockTime, firstObjective, handoffPrompt, toneOf } from './format'
 
 const KEY = 'auto-handoff'
 const FRESH_MS = 10 * 60_000
@@ -226,6 +226,7 @@ export const register: Register = on => {
     const stale = await read($, staleA)
     const now = await $.clock.now()
     const isDue = fill !== null && fill >= s.threshold
+    const cells = fill === null ? null : bar(fill, 6)
     const showStale = stale !== null && phase === 'idle' && !isDue
 
     return (
@@ -234,7 +235,8 @@ export const register: Register = on => {
           <Text bold color="#0b0b0f" backgroundColor="#a78bfa"> ⇄ CONTEXT </Text>
           <Text color={fill === null ? '#a1a1aa' : toneOf(fill, s.threshold)}>
             {'  ctx '}
-            {fill === null ? '—' : bar(fill, 6)}
+            {cells ? cells.on : '—'}
+            {cells && <Text color={TRACK}>{cells.off}</Text>}
             {'  '}
             {fill === null ? '' : `${Math.round(fill)}%`}
           </Text>

@@ -14,9 +14,12 @@ export const fmtMin = (ms: number) => {
   return m < 1 ? '<1m' : `${m}m`
 }
 
+// The empty part is the same block in TRACK gray, drawn as its own Text run.
+export const TRACK = '#52525b'
+
 export function bar(pct: number, cells = 6) {
   const on = Math.max(0, Math.min(cells, Math.round((cells * pct) / 100)))
-  return '▰'.repeat(on) + '▱'.repeat(cells - on)
+  return { on: '▆'.repeat(on), off: '▆'.repeat(cells - on) }
 }
 
 const spent = (t: GoalTask) => (t.startedAt !== null && t.endedAt !== null ? t.endedAt - t.startedAt : null)

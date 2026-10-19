@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface as Engine, Register } from 'claude-code'
 
 import type { GoalRecord, GoalState, GoalTask } from '../types'
-import { AMBER, GREEN, SHOW_DONE_MS, bar, firstLine, fmtMin, stats, taskTime } from './format'
+import { AMBER, GREEN, SHOW_DONE_MS, TRACK, bar, firstLine, fmtMin, stats, taskTime } from './format'
 
 const KEY = 'goal-meter'
 const HISTORY_KEY = 'goal-meter.history'
@@ -199,13 +199,14 @@ export const register: Register = on => {
     }
     const s = stats(goal, now)
     const tone = s.isSlow ? AMBER : GREEN
+    const cells = bar(s.pct)
 
     return (
       <Box flexDirection="column">
         <Box>
           <Text bold color="#0b0b0f" backgroundColor="#facc15"> ◆ GOAL </Text>
           <Text>{` ${isHidden ? 'goal' : goal.name}`}</Text>
-          <Text color={isDone ? GREEN : tone}>{'  '}{bar(s.pct)}</Text>
+          <Text color={isDone ? GREEN : tone}>{'  '}{cells.on}<Text color={TRACK}>{cells.off}</Text></Text>
           {isDone ? (
             <Text color={GREEN}>{'  done ✓ in '}{fmtMin((goal.doneAt ?? now) - goal.startedAt)}</Text>
           ) : (

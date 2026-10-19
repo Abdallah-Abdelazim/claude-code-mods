@@ -11,9 +11,12 @@ export const titleName = (kind: string) => TITLE[kind] ?? kind
 // Green under 60%, amber 60 to 85, red over 85.
 export const toneOf = (pct: number) => (pct > 85 ? '#ef4444' : pct >= 60 ? '#f59e0b' : '#22c55e')
 
+// The empty part is the same block in TRACK gray, drawn as its own Text run.
+export const TRACK = '#52525b'
+
 export function bar(pct: number, cells: number) {
   const on = Math.max(0, Math.min(cells, Math.round((cells * pct) / 100)))
-  return '▰'.repeat(on) + '▱'.repeat(cells - on)
+  return { on: '▆'.repeat(on), off: '▆'.repeat(cells - on) }
 }
 
 export function countdown(ms: number) {

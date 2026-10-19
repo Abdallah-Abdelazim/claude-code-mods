@@ -22,9 +22,12 @@ export const handoffPrompt = (path: string) =>
 export const toneOf = (fill: number, threshold: number) =>
   fill >= threshold ? '#ef4444' : fill >= 60 ? '#f59e0b' : '#22c55e'
 
+// The empty part is the same block in TRACK gray, drawn as its own Text run.
+export const TRACK = '#52525b'
+
 export function bar(pct: number, cells: number) {
   const on = Math.max(0, Math.min(cells, Math.round((cells * pct) / 100)))
-  return '▰'.repeat(on) + '▱'.repeat(cells - on)
+  return { on: '▆'.repeat(on), off: '▆'.repeat(cells - on) }
 }
 
 export function clockTime(ms: number) {

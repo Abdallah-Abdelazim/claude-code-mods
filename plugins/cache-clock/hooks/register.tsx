@@ -18,6 +18,7 @@ const KEY = 'cache-clock'
 const amberMs = (ttlMs: number) => ttlMs / 4
 const warnMs = (ttlMs: number) => Math.min(5 * 60_000, ttlMs / 5)
 const BAR = 6
+const TRACK = '#52525b'
 
 // Ms until the cache goes cold; 0 when cold or no main request has cached yet.
 const remaining = async ($: Engine, ttlMs: number) => {
@@ -100,7 +101,8 @@ export const register: Register = (on, options) => {
     const isCold = left <= 0
     const tone = isCold ? '#ef4444' : left <= amberMs(ttlMs) ? '#f59e0b' : '#22c55e'
     const filled = Math.max(0, Math.min(BAR, Math.round((BAR * left) / ttlMs)))
-    const bar = '▰'.repeat(filled) + '▱'.repeat(BAR - filled)
+    const barOn = '▆'.repeat(filled)
+    const barOff = '▆'.repeat(BAR - filled)
     const state = isCold ? 'COLD' : `warm ${Math.ceil(left / 60_000)}m`
     const reuse =
       step && promptOf(step) > 0 ? `${Math.round((100 * step.reads) / promptOf(step))}% reused` : 'no request yet'
@@ -111,7 +113,7 @@ export const register: Register = (on, options) => {
       <Box flexDirection="column">
         <Box>
           <Text bold color="#0b0b0f" backgroundColor="#22d3ee"> ● CACHE </Text>
-          <Text color={tone}> {state} {bar}</Text>
+          <Text color={tone}> {state} {barOn}<Text color={TRACK}>{barOff}</Text></Text>
           <Text dimColor>{'  '}{reuse} · {cached} cached · cold rewrite {rewrite} </Text>
           <Button key="compact" plain label="[Compact]" onPress={() => compact($)} />
         </Box>
