@@ -1,6 +1,6 @@
 {
   "name": "usage-gauge",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": { "name": "Abdallah Abdelazim" },
   "description": "Shows plan window usage, reset times and session cost in the band above the prompt.",
   "types": "./types/index.d.ts"
