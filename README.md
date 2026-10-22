@@ -14,17 +14,14 @@ Mods for Claude Code that add a band above the prompt, a side pane or a slash co
 | `usage-limits` | footer | Session (5h) and week (7d) rate-limit bars in the prompt footer. | none |
 | `auto-handoff` | CONTEXT | Watches how full the chat is and saves a `HANDOFF.md` when it reaches a threshold, then offers to clear and resume. | `/auto-handoff on \| off \| now \| resume \| threshold <n> \| mode auto\|ask \| hide \| show \| status` |
 | `agent-watch` | AGENTS | Shows the main chat and helper agents with their models and tasks, plus the skills that ran this turn. Opens an Agents pane. | `/agent-watch` (opens the Agents pane), `on \| off \| clear \| help` |
-| `recording-mode` | REC | For screen recordings. Masks keys, tokens, emails, phone numbers and your private words on screen, and tells the model not to print them. | `/rec`, `/rec strict`, `/rec off`, `/rec hide <word>`, `/rec unhide <word>`, `/rec list`, `/rec test <text>` |
 
-Bands stack in the order their plugins appear in `enabledPlugins` in `~/.claude/settings.json`, first on top. To reorder, move the lines and run `/reload-plugins`; `claude plugin install` adds new entries at the end. `band-rule` draws its line above the whole stack only when it is listed first. The author's order, top to bottom: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `recording-mode`, `usage-limits`. The last one draws in the footer, so its place doesn't matter. The Band column is the title each mod shows in its band.
+Bands stack in the order their plugins appear in `enabledPlugins` in `~/.claude/settings.json`, first on top. To reorder, move the lines and run `/reload-plugins`; `claude plugin install` adds new entries at the end. `band-rule` draws its line above the whole stack only when it is listed first. The author's order, top to bottom: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `usage-limits`. The last one draws in the footer, so its place doesn't matter. The Band column is the title each mod shows in its band.
 
 Each band is one row. In a narrow terminal the end of the row is cut off with `…` instead of wrapping.
 
 `usage-gauge` and `usage-limits` both show plan usage, so enable only one.
 
 In `auto` mode, `auto-handoff` sends the handoff prompt as soon as the threshold is crossed, even while Claude is mid-task. The default `ask` mode only offers the button.
-
-While `recording-mode` is on, `agent-watch` also hides task text.
 
 `cache-clock` has a `cacheMinutes` option (`5` or `60`, default `60`). Other settings are set through each mod's commands and persist between sessions.
 

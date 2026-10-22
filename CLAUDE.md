@@ -14,13 +14,13 @@ plugins/<name>/
   types/index.d.ts             state contract, only when it uses atoms
 ```
 
-- `types/index.d.ts` may only `export type`s plus `declare module 'claude-code'` augmenting `PluginState`; a bare `export {}` fails validation. Declare every atom you read, including another plugin's (`recording-mode`'s `mode` is declared in `agent-watch`).
+- `types/index.d.ts` may only `export type`s plus `declare module 'claude-code'` augmenting `PluginState`; a bare `export {}` fails validation. Declare every atom you read, including another plugin's.
 - `.claude-plugin/types/` is written by the engine and git-ignored. For a type-check outside a session, point `tsc` at the `claude-code.d.ts` bundled with the `plugin-authoring` skill and include each plugin's `hooks`, `types` and `*.test.ts`.
 - New plugin: add it to `.claude-plugin/marketplace.json`, the `README.md` table and the marketplace description.
 
 ## Bands
 
-Each `AbovePrompt` hook draws its row and wraps the band below it (`const below = await next(e)`). Hooks nest in `enabledPlugins` order in `~/.claude/settings.json`, first on top. `band-rule` draws the separator line and must be listed before the other mods. Reorder by editing the lines in that object, then `/reload-plugins`; `claude plugin install` appends at the end. Current order: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `recording-mode`, `usage-limits`.
+Each `AbovePrompt` hook draws its row and wraps the band below it (`const below = await next(e)`). Hooks nest in `enabledPlugins` order in `~/.claude/settings.json`, first on top. `band-rule` draws the separator line and must be listed before the other mods. Reorder by editing the lines in that object, then `/reload-plugins`; `claude plugin install` appends at the end. Current order: `band-rule`, `agent-watch`, `auto-handoff`, `cache-clock`, `usage-gauge`, `usage-limits`.
 
 Every band's title chip is 11 cells wide (the label padded to match ` ⇄ CONTEXT `), so the colored column lines up; keep new chips at 11 and `CHIP_WIDTH` in `agent-watch` in step. Band text starts one space after the chip in every mod. A band is one row: the chip sits in a `Box flexShrink={0}` and the rest in a single `<Text wrap="truncate-end">` with nested colored `Text`s, so a narrow terminal cuts the end with `…` instead of wrapping; buttons get their own `flexShrink={0}` Box.
 
