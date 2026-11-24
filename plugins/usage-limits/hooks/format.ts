@@ -1,7 +1,7 @@
 import type { Limit } from '../types'
 
 const WIDTH = 10
-const LABELS: Record<string, string> = { five_hour: 'Session', seven_day: 'Week' }
+const LABELS: Record<string, string> = { five_hour: '5h', seven_day: 'week' }
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export const bar = (percent: number): string => {

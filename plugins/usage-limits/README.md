@@ -3,7 +3,7 @@
 A Claude Code mod that shows your **session (5-hour)** and **week (7-day)** rate-limit usage as progress bars in the prompt footer, with when each one resets.
 
 ```
-Session ████░░░░░░ 42% ↻1h30m  ·  Week █░░░░░░░░░ 7% ↻Thu 1am
+5h ████░░░░░░ 42% ↻1h30m  ·  week █░░░░░░░░░ 7% ↻Thu 1am
 ```
 
 The bars appear next to the session mode indicator and update whenever Claude Code re-measures your rate limits.
@@ -28,7 +28,7 @@ The mod is a plugin of function hooks (`hooks/hooks.json` → `hooks/register.ts
 | `session.measure` | Refreshes the limits when `rateLimits` changed. |
 | `ui.render` (`SessionMode`) | Appends the line to the session mode indicators. |
 
-`hooks/format.ts` renders each limit as a 10-cell bar (`█` filled, `░` empty), clamped to 0–100%. Only the `five_hour` (Session) and `seven_day` (Week) limits are shown; other kinds are ignored. The session limit shows a countdown to its reset (`↻1h30m`), the week limit its reset day and hour (`↻Thu 1am`). If no limits are reported, nothing is rendered.
+`hooks/format.ts` renders each limit as a 10-cell bar (`█` filled, `░` empty), clamped to 0–100%. Only the `five_hour` (5h) and `seven_day` (week) limits are shown; other kinds are ignored. The session limit shows a countdown to its reset (`↻1h30m`), the week limit its reset day and hour (`↻Thu 1am`). If no limits are reported, nothing is rendered.
 
 ## Development
 
